@@ -7,7 +7,7 @@
         (= (remainder x 2) 0))
     
     (define (multiply_iter a b v)
-        (cond ((= b 1) (+ v a))
+        (cond ((= b 0) v)
               ((even? b) (multiply_iter (double a) 
                                         (halve b)
                                         v))
@@ -17,6 +17,7 @@
                                    
     (multiply_iter a b 0))
 
+(multiply 2 0)
 (multiply 2 1)
 (multiply 2 3)
 (multiply 2 4)

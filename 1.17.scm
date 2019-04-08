@@ -6,17 +6,16 @@
     (define (even? x)
         (= (remainder x 2) 0))
     
-    (define (multiply_iter a b v)
-        (cond ((= b 1) (+ v a))
+    (define (multiply_iter a b)
+        (cond ((= b 0) 0)
               ((even? b) (multiply_iter (double a) 
-                                        (halve b)
-                                        v))
-              (else (multiply_iter a 
-                                   (- b 1)
-                                   (+ v a)))))
+                                        (halve b)))
+              (else (+ a (multiply_iter a 
+                                        (- b 1))))))
                                    
-    (multiply_iter a b 0))
+    (multiply_iter a b))
 
+(multiply 2 0)
 (multiply 2 1)
 (multiply 2 3)
 (multiply 2 4)
