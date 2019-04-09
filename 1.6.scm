@@ -2,21 +2,12 @@
     (cond (predicate then-clause)
           (else else-clause)))
 
-(define (abs x)
-  (if (< x 0)
-      (- x)
-      x))
-
-(define (square x) (* x x))
-
-(define (average x y)
-  (/ (+ x y)
-     2))
+(load "utilities/average.scm")
 
 (define (good-enough? guess x)
   (< (abs (- (square guess)
               x))
-         0.0001))
+         0.00001))
   
 (define (improve guess x)
   (average guess (/ x guess)))
@@ -30,4 +21,4 @@
   (sqrt-iter 1.0 x))
 
 (sqrt 2)
-(sqrt 0.000001)
+(sqrt 0.00001)
