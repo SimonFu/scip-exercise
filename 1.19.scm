@@ -2,7 +2,7 @@
 ;b<-bp+aq
 
 ;a<-(bp+aq)q+(bp+aq+ap)q+(bp+aq+ap)p
-;a<-b(q^2+2pq)+q(q^2+20q)+a(p^2+q^2)
+;a<-b(q^2+2pq)+q(q^2+2pq)+a(p^2+q^2)
 
 ;b<-(bp+aq)p+(bp+aq+ap)q
 ;b<-b(p^2+q^2)+a(q^2+2pq)
