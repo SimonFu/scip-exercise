@@ -1,4 +1,4 @@
-(define (zero) 
+(define zero 
     (lambda (f)
         (lambda (x) x)))
 
@@ -7,11 +7,11 @@
         (lambda (x)
             (f ((n f) x)))))
 
-(define (one) 
+(define one 
     (lambda (f)
         (lambda (x) (f x))))
 
-(define (two) 
+(define two 
     (lambda (f)
         (lambda (x) (f (f x)))))
 
@@ -20,4 +20,10 @@
         (lambda (x)
             ((a f) ((b f) x)))))
 
+(load "utilities/inc.scm")
+
+((two inc) 0)
+(((add two two) inc) 0)
+(((add two one) inc) 0)
+(((add one two) inc) 0)
         
