@@ -18,7 +18,7 @@
                       (/ (+ x 1) x)))
     (define (next x) (+ x 1))
     
-    (* 4 (mul term 2 next n)))
+    (* 4.0 (mul term 2 next n)))
 
 (pi 100)
 (pi 1000)
