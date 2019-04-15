@@ -1,0 +1,15 @@
+(define (newtons-method g guess)
+    (define dx 0.00001)
+    (define (deriv g)
+        (lambda (x) 
+            (/ (- (g (+ x dx))
+                  (g x))
+               dx)))
+    (define (newton-transform g)
+        (lambda (x)
+            (- x 
+               (/ (g x)
+                  ((deriv g) x)))))
+    (load "utilities/fixed-point.scm")
+    
+    (fixed-point (newton-transform g) guess))
