@@ -1,0 +1,31 @@
+(load "utilities/enumerate-interval.scm")
+(load "utilities/flatmap.scm")
+(load "utilities/filter.scm")
+
+(define (odered-triple n)
+    (flatmap    (lambda (i)
+                    (flatmap    (lambda (j)
+                                (map    (lambda (k)
+                                            (list i j k))
+                                        (enumerate-interval 1 n)))
+                            (enumerate-interval 1 n)))
+                (enumerate-interval 1 n)))
+
+(define (find-triple-sum-equal n s)
+    (define (sum-equal? triple)
+        (let (  (i  (car triple))
+                (j  (car (cdr triple)))
+                (k  (car (cdr (cdr triple)))))
+            (= (+ i j k) s)))
+    (define (distinct? triple)
+        (let (  (i  (car triple))
+                (j  (car (cdr triple)))
+                (k  (car (cdr (cdr triple)))))
+            (not    (or (= i j)
+                        (= i k)
+                        (= j k)))))
+    (filter sum-equal?
+            (filter distinct?
+                    (odered-triple n))))
+
+(find-triple-sum-equal 4 8)
