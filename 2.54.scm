@@ -1,0 +1,12 @@
+(define (equal? seq1 seq2)
+        (cond   ((and (null? seq1) (null? seq2)) true)
+                ((and   (pair? (car seq1))
+                        (pair? (car seq2)))
+                    (and    (equal? (car seq1) (car seq2))
+                            (equal? (cdr seq1) (cdr seq2))))
+                ((eq? (car seq1) (car seq2)) (equal? (cdr seq1) (cdr seq2)))
+                (else false)))
+
+(equal? '(this is a list) '(this is a list))
+(equal? '(this is a list) '(this (is a) list))
+(equal? '(this (is a) list) '(this (is a) list))
