@@ -1,0 +1,20 @@
+(load "2.63.scm")
+(load "2.64.scm")
+(load "2.62.scm")
+
+(define (union-set set1 set2)
+    (define (merge-list list1 list2)
+        (cond   ((null? list1) list2)
+                ((null? list2) list1)
+                (else   (let (  (x1 (car list1))
+                                (x2 (car list2)))
+                            (cond   ((> x1 x2) (cons x2 (merge-list list1 (cdr list2))))
+                                    ((< x1 x2) (cons x1 (merge-list (cdr list1) list2)))
+                                    (else (cons x1 (merge-list (cdr list1) (cdr list2)))))))))
+
+    (let (  (l1 (tree->list-2 set1))
+            (l2 (tree->list-2 set2)))
+        (let (  (l (merge-list l1 l2)))
+            (list->tree l))))
+
+(union-set (list->tree (list 1 3 5 7 9 11)) (list->tree (list 2 4 6 8 10 12)))
