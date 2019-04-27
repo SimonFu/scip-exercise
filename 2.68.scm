@@ -27,5 +27,5 @@
                             (make-leaf 'D 1)
                             (make-leaf 'C 1)))))
 
-(define message '(A D A B B C A))
-(encode message tree)
+;(define message '(A D A B B C A))
+;(encode message tree)
