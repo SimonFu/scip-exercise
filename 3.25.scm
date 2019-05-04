@@ -1,39 +1,39 @@
-(define (make-table same-key?)
-    (define (assoc key records)
-        (cond   ((null? records) false)
-                ((same-key? key (caar records)) (car records))
-                (else (assoc key (cdr records)))))
-    (let ((local-table (list '*table*)))
-        (define (lookup key-1 key-2)
-            (let ((subtable (assoc key-1 (cdr local-table))))
-                (if subtable
-                    (let ((record (assoc key-2 (cdr subtable))))
-                        (if record
-                            (cdr record)
-                            false))
-                    (error "not found subtable"))))
-        (define (insert! key-1 key-2 value)
-            (let ((subtable (assoc key-1 (cdr local-table))))
-                (if subtable
-                    (let ((record (assoc key-1 (cdr subtable))))
-                        (if record
-                            (set-cdr!   record
-                                        value)
-                            (set-cdr!   record
-                                        (cons   (cons key-2 value)
-                                                (cdr record)))))
-                    (set-cdr!   local-table
-                                (cons   (list key-1 (cons key-2 value))
-                                        (cdr local-table))))))
-        (define (dispatch m)
-            (cond   ((eq? m 'lookup) lookup)
-                    ((eq? m 'insert!) insert!)
-                    (error "Unknown operation: TABLE" m)))
-        
-        dispatch))
+(define (make-table)
+    (list '*table*))
 
-    (define t (make-table equal?))
-    ((t 'insert!) 'simon 'math 100)
-    ((t 'insert!) 'simon 'english 98)
-    ((t 'insert!) 'mike 'computer 98)
-    ((t 'lookup) 'simon 'computer)
+(define (assoc key records)
+        (cond   ((null? records) false)
+                ((and (pair? (car records)) (equal? key (caar records))) (car records))
+                ((and (not (pair? (car records))) (equal? key (car records))) records)
+                (else (assoc key (cdr records)))))
+
+(define (lookup keys table)
+    (cond   ((null? table) false) 
+            ((null? keys) (if   (or (null? table) (pair? (cdr table)))
+                                false
+                                (cdr table)))
+            (else
+                (let ((subtable (assoc (car keys) (cdr table))))
+                    (if subtable
+                        (lookup subtable (cdr keys))
+                        false)))))
+
+(define (insert! keys value table)
+    (let (  (subtable (assoc (car keys) (cdr table)))
+            (key (car keys)))
+        (if subtable
+            (if (null? (cdr keys))
+                (set-cdr! subtable (cons (cons key value) (cdr subtable))
+                (insert! (cdr keys) value subtable)))            
+            (if (null? (cdr keys))
+                (set-cdr! table (cons (cons key value) (cdr table)))
+                (begin  (set-cdr!    table
+                                    (cons (list key) (cdr table)))
+                        (insert! (cdr keys) value (cadr table)))))))
+
+
+(define table (make-table))
+(insert! (list 'a) 10 table)
+(display table)
+(lookup (list 'a) table)
+(cdr table)
