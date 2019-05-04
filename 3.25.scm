@@ -2,38 +2,44 @@
     (list '*table*))
 
 (define (assoc key records)
-        (cond   ((null? records) false)
-                ((and (pair? (car records)) (equal? key (caar records))) (car records))
-                ((and (not (pair? (car records))) (equal? key (car records))) records)
-                (else (assoc key (cdr records)))))
+    (cond   ((null? records) false)
+            ((equal? key (caaar records)) (car records))
+            (else (assoc key (cdr records)))))
 
 (define (lookup keys table)
-    (cond   ((null? table) false) 
-            ((null? keys) (if   (or (null? table) (pair? (cdr table)))
-                                false
-                                (cdr table)))
-            (else
-                (let ((subtable (assoc (car keys) (cdr table))))
-                    (if subtable
-                        (lookup subtable (cdr keys))
-                        false)))))
+    (let (  (subtable (assoc (car keys) (cdr table)))
+            (key (car keys)))
+        (if subtable
+            (if (null? (cdr keys)) 
+                (cdr (car subtable))
+                (lookup (cdr keys) subtable))
+            false)))
 
 (define (insert! keys value table)
     (let (  (subtable (assoc (car keys) (cdr table)))
             (key (car keys)))
         (if subtable
+            (if (null? (cdr keys)) 
+                (set-cdr!   (car subtable) 
+                            value)
+                (insert! (cdr keys) value subtable))
             (if (null? (cdr keys))
-                (set-cdr! subtable (cons (cons key value) (cdr subtable))
-                (insert! (cdr keys) value subtable)))            
-            (if (null? (cdr keys))
-                (set-cdr! table (cons (cons key value) (cdr table)))
+                (set-cdr!   table 
+                            (cons   (list (cons key value)) 
+                                    (cdr table)))
                 (begin  (set-cdr!    table
-                                    (cons (list key) (cdr table)))
+                                    (cons (list (cons key '())) (cdr table)))
                         (insert! (cdr keys) value (cadr table)))))))
 
 
 (define table (make-table))
 (insert! (list 'a) 10 table)
+(insert! (list 'b) 20 table)
+(insert! (list 'a 'aa) 11 table)
+(insert! (list 'a) 100 table)
+(insert! (list 'a 'c 'd) 1234 table)
 (display table)
 (lookup (list 'a) table)
-(cdr table)
+(lookup (list 'a 'aa) table)
+(lookup (list 'a 'c 'd) table)
+(lookup (list 'a 'b 'd) table)
