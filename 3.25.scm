@@ -11,7 +11,10 @@
             (key (car keys)))
         (if subtable
             (if (null? (cdr keys)) 
-                (cdr (car subtable))
+                (let ((value (cdr (car subtable)))) 
+                    (if (null? value)
+                        false
+                        value))
                 (lookup (cdr keys) subtable))
             false)))
 
